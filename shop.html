@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kidsnays — Bebek ve Çocuk Giyim</title>
+  <meta name="description" content="Kidsnays Children’s Concept Store: bebek ve çocuk giyim, ayakkabı ve aksesuar.">
+  <link rel="icon" href="images/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================
+   RENKLER VE YAZI TİPLERİ
+   ===================================================== */
+:root {
+  --kahve: #4A2E20;
+  --kahve-acik: #7A5A48;
+  --krem: #F4EDE5;
+  --beyaz: #FFFDFB;
+  --hardal: #E3A92F;
+  --mercan: #EE7C6F;
+  --yesil: #4E8B7A;
+  --cizgi: #E6DCD1;
+  --baslik-font: "Fredoka", sans-serif;
+  --yazi-font: "Nunito", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--yazi-font); color: var(--kahve); background: var(--beyaz); line-height: 1.5; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; color: inherit; border: 0; background: none; }
+button { cursor: pointer; }
+ul { list-style: none; }
+.kapsayici { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+
+/* =====================================================
+   GÖRSEL KUTUSU (fotoğraf yoksa dosya adı görünür)
+   ===================================================== */
+.gorsel { position: relative; overflow: hidden; background: var(--renk, #F3E8DC); }
+.gorsel::before {
+  content: "images/" attr(data-ad) ".jpg";
+  position: absolute; inset: 8px;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  border: 2px dashed rgba(74, 46, 32, .25); border-radius: inherit;
+  font-size: .8rem; font-weight: 800; color: var(--kahve-acik); padding: 6px;
+}
+.gorsel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+
+/* =====================================================
+   ÜST KAMPANYA ŞERİDİ
+   ===================================================== */
+.serit { background: var(--kahve); color: #FFF3E4; text-align: center; font-weight: 700; font-size: .92rem; height: 40px; overflow: hidden; position: relative; }
+.serit p { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: transform .5s, opacity .5s; }
+.serit p.gizli { transform: translateY(100%); opacity: 0; }
+.serit b { color: var(--hardal); }
+
+
+/* =====================================================
+   ÜST MENÜ
+   ===================================================== */
+.ust { position: sticky; top: 0; z-index: 40; background: var(--beyaz); border-bottom: 1px solid var(--cizgi); }
+.ust-satir { display: flex; align-items: center; gap: 28px; height: 84px; }
+.logo img { height: 58px; display: block; }
+.arama { flex: 1; max-width: 560px; display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 18px; border-radius: 99px; background: var(--krem); }
+.arama input { flex: 1; outline: none; }
+.arama svg { width: 20px; opacity: .6; }
+.ikonlar { margin-left: auto; display: flex; gap: 6px; }
+.ikon { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 10px; border-radius: 14px; font-size: .78rem; font-weight: 700; }
+.ikon:hover { background: var(--krem); }
+.ikon svg { width: 24px; height: 24px; }
+.sayac { position: absolute; top: 0; right: 6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 99px; background: var(--mercan); color: #fff; font-size: .72rem; display: grid; place-items: center; }
+.menu-ac { display: none; }
+
+/* kategori menüsü */
+.kategoriler { display: flex; gap: 4px; }
+.kategoriler > li > a { display: block; padding: 14px 14px 16px; font-weight: 800; font-size: .95rem; border-bottom: 3px solid transparent; }
+.kategoriler > li:hover > a { border-color: var(--hardal); }
+.kategoriler .indirim > a { color: var(--mercan); }
+
+/* açılır büyük menü */
+.mega { position: absolute; left: 0; right: 0; top: 100%; background: var(--beyaz); border-top: 1px solid var(--cizgi); box-shadow: 0 30px 40px -30px rgba(74, 46, 32, .35); padding: 30px 0 36px; display: none; }
+.kategoriler > li:hover .mega { display: block; }
+.mega .kapsayici { display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 30px; }
+.mega h4 { font-family: var(--baslik-font); font-weight: 600; font-size: 1.05rem; margin-bottom: 10px; }
+.mega li a { display: block; padding: 4px 0; color: var(--kahve-acik); }
+.mega li a:hover { color: var(--kahve); text-decoration: underline; }
+.mega .gorsel { aspect-ratio: 4 / 3; border-radius: 20px; }
+
+
+/* =====================================================
+   KAMPANYA BLOKLARI (Vertbaudet ana sayfa yapısı)
+   ===================================================== */
+.kampanya { background: var(--zemin); padding: 50px 0 40px; margin-bottom: 20px; overflow: hidden; }
+.kampanya-ust { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; }
+.kampanya h1, .kampanya h2 { font-family: var(--baslik-font); font-weight: 700; font-size: clamp(2.6rem, 6vw, 5.2rem); line-height: .95; }
+.kampanya h1 span, .kampanya h2 span { color: var(--mercan); }
+.kampanya p { font-size: 1.2rem; margin: 16px 0 24px; color: var(--kahve-acik); }
+.kampanya .kosul { display: block; font-size: .8rem; margin-top: 10px; text-decoration: underline; color: var(--kahve-acik); }
+.kampanya .buyuk-gorsel { aspect-ratio: 16 / 11; border-radius: 32px; }
+.kampanya.ters .kampanya-ust { grid-template-columns: 1.1fr 1fr; }
+.kampanya.ters .buyuk-gorsel { order: -1; }
+
+/* kayan yazı */
+.kayan { overflow: hidden; white-space: nowrap; margin: 34px 0 30px; }
+.kayan div { display: inline-block; animation: kay 28s linear infinite; font-family: var(--baslik-font); font-weight: 700; font-size: 2.4rem; color: rgba(74, 46, 32, .12); }
+@keyframes kay { to { transform: translateX(-50%); } }
+
+.buton { display: inline-block; padding: 15px 30px; border-radius: 99px; background: var(--kahve); color: #fff; font-weight: 800; transition: transform .2s; }
+.buton:hover { transform: translateY(-2px); }
+.buton.acik { background: #fff; color: var(--kahve); }
+
+
+/* =====================================================
+   ÜRÜN KAYDIRICISI VE ÜRÜN KARTI
+   ===================================================== */
+.kaydirici { position: relative; margin-top: 30px; }
+.urunler { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding-bottom: 10px; scrollbar-width: none; }
+.urunler::-webkit-scrollbar { display: none; }
+.kart { flex: 0 0 calc((100% - 72px) / 5); scroll-snap-align: start; background: #fff; border-radius: 22px; padding: 10px; }
+.kart .gorsel { aspect-ratio: 3 / 4; border-radius: 16px; }
+.kart .etiket { position: absolute; top: 10px; left: 10px; z-index: 2; background: var(--mercan); color: #fff; font-weight: 800; font-size: .78rem; padding: 4px 10px; border-radius: 99px; }
+.kart .favori { position: absolute; top: 8px; right: 8px; z-index: 2; width: 38px; height: 38px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+.kart .favori svg { width: 20px; fill: none; stroke: var(--kahve); stroke-width: 2; }
+.kart .favori.secili svg { fill: var(--mercan); stroke: var(--mercan); }
+.kart .sepete { position: absolute; left: 10px; right: 10px; bottom: 10px; z-index: 2; padding: 12px; border-radius: 99px; background: var(--kahve); color: #fff; font-weight: 800; font-size: .9rem; opacity: 0; transform: translateY(10px); transition: .25s; }
+.kart:hover .sepete { opacity: 1; transform: none; }
+.kart h3 { font-weight: 700; font-size: .98rem; margin: 12px 4px 4px; }
+.fiyat { margin: 0 4px 6px; display: flex; gap: 8px; align-items: baseline; }
+.fiyat strong { color: var(--mercan); font-size: 1.1rem; }
+.fiyat s { color: var(--kahve-acik); font-size: .88rem; }
+.renkler { display: flex; gap: 6px; margin: 0 4px 4px; }
+.renkler i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--cizgi); }
+
+.oklar { position: absolute; top: 40%; left: -20px; right: -20px; display: flex; justify-content: space-between; pointer-events: none; }
+.oklar button { pointer-events: auto; width: 48px; height: 48px; border-radius: 50%; background: #fff; box-shadow: 0 6px 20px -8px rgba(74, 46, 32, .5); font-size: 1.5rem; }
+
+
+/* =====================================================
+   ÖNE ÇIKANLAR (kategori kutuları)
+   ===================================================== */
+.bolum { padding: 70px 0 0; }
+.bolum-baslik { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 26px; }
+.bolum-baslik h2 { font-family: var(--baslik-font); font-weight: 700; font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1; }
+.bolum-baslik a { font-weight: 800; text-decoration: underline; }
+
+.one-cikanlar { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; }
+.one-cikanlar a { text-align: center; font-weight: 800; }
+.one-cikanlar .gorsel { aspect-ratio: 3 / 4; border-radius: 999px 999px 24px 24px; margin-bottom: 12px; transition: transform .3s; }
+.one-cikanlar a:hover .gorsel { transform: translateY(-6px); }
+
+
+/* =====================================================
+   MARKALAR
+   ===================================================== */
+.markalar { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 18px; }
+.markalar .gorsel { border-radius: 24px; aspect-ratio: 1; }
+.markalar .ana { aspect-ratio: auto; background: var(--hardal); padding: 30px; display: flex; flex-direction: column; justify-content: flex-end; }
+.markalar .ana::before { display: none; }
+.markalar .ana h3 { font-family: var(--baslik-font); font-size: 2rem; line-height: 1.05; margin-bottom: 14px; }
+
+
+/* =====================================================
+   EBEVEYN REHBERİ
+   ===================================================== */
+.rehber { display: grid; grid-template-columns: 1fr 1fr; background: #D5EBE3; border-radius: 32px; overflow: hidden; }
+.rehber .gorsel { min-height: 380px; }
+.rehber div.yazi { padding: 50px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.rehber h2 { font-family: var(--baslik-font); font-size: 2.6rem; line-height: 1; margin-bottom: 12px; }
+.rehber p { color: var(--kahve-acik); font-size: 1.1rem; margin-bottom: 24px; }
+
+
+/* =====================================================
+   INSTAGRAM
+   ===================================================== */
+.instagram { text-align: center; }
+.instagram h2 { font-family: var(--baslik-font); font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.2; margin-bottom: 26px; }
+.instagram h2 b { color: var(--mercan); }
+.insta-kutular { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 26px; }
+.insta-kutular .gorsel { aspect-ratio: 1; border-radius: 18px; }
+
+
+/* =====================================================
+   GÜVENCELER VE ALT BİLGİ
+   ===================================================== */
+.guvenceler { margin-top: 80px; background: var(--krem); }
+.guvenceler .kapsayici { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding-top: 30px; padding-bottom: 30px; }
+.guvence { display: flex; align-items: center; gap: 14px; font-weight: 800; }
+.guvence span { font-size: 1.8rem; }
+.guvence small { display: block; font-weight: 600; color: var(--kahve-acik); }
+
+footer { background: var(--kahve); color: #F4E3CF; padding: 60px 0 30px; }
+.alt-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
+footer h4 { font-family: var(--baslik-font); font-weight: 600; font-size: 1.15rem; color: #fff; margin-bottom: 14px; }
+footer li { margin-bottom: 8px; opacity: .85; }
+footer a:hover { color: #fff; text-decoration: underline; }
+.bulten { display: flex; gap: 8px; margin: 14px 0 20px; }
+.bulten input { flex: 1; min-width: 0; height: 50px; padding: 0 18px; border-radius: 99px; background: #fff; color: var(--kahve); }
+.bulten button { height: 50px; padding: 0 22px; border-radius: 99px; background: var(--hardal); color: var(--kahve); font-weight: 800; }
+.telif { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(244, 227, 207, .2); font-size: .88rem; opacity: .7; }
+
+
+/* =====================================================
+   HOŞ GELDİN PENCERESİ VE BİLDİRİM
+   ===================================================== */
+.pencere { position: fixed; inset: 0; z-index: 90; background: rgba(74, 46, 32, .55); display: none; place-items: center; padding: 20px; }
+.pencere.acik { display: grid; }
+.pencere-kutu { position: relative; width: min(760px, 100%); background: var(--beyaz); border-radius: 32px; overflow: hidden; display: grid; grid-template-columns: 1fr 1.1fr; }
+.pencere-kutu .gorsel { min-height: 320px; --renk: #F9DAD4; }
+.pencere-yazi { padding: 40px 34px; }
+.pencere-yazi small { color: var(--mercan); font-weight: 800; }
+.pencere-yazi h2 { font-family: var(--baslik-font); font-size: 2.4rem; line-height: 1; margin: 8px 0 12px; }
+.pencere-yazi h2 span { color: var(--mercan); }
+.kod { display: inline-block; margin: 6px 0 20px; padding: 10px 18px; border: 2px dashed var(--kahve-acik); border-radius: 14px; font-family: var(--baslik-font); font-size: 1.4rem; letter-spacing: .08em; }
+.kapat { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%; background: #fff; font-size: 1.5rem; }
+
+.bildirim { position: fixed; left: 50%; bottom: 24px; z-index: 95; transform: translate(-50%, 200%); visibility: hidden; background: var(--kahve); color: #fff; padding: 14px 24px; border-radius: 99px; font-weight: 800; transition: transform .3s; }
+.bildirim.goster { transform: translate(-50%, 0); visibility: visible; }
+
+/* mobil menü */
+.mobil-menu { position: fixed; inset: 0; z-index: 80; background: var(--beyaz); padding: 20px 24px; display: none; overflow-y: auto; }
+.mobil-menu.acik { display: block; }
+.mobil-menu a { display: block; padding: 16px 0; border-bottom: 1px solid var(--cizgi); font-weight: 800; font-size: 1.1rem; }
+.mobil-menu .kapat { position: static; float: right; background: var(--krem); }
+
+
+/* =====================================================
+   TAM EKRAN SLIDER
+   ===================================================== */
+/* üst menünün yüksekliği: slider ekranın geri kalanını doldurur */
+:root { --ts-ust: 174px; }
+
+.tam-slider { position: relative; height: calc(100svh - var(--ts-ust)); min-height: 460px; overflow: hidden; background: var(--krem); }
+
+/* her slayt üst üste durur, sadece "aktif" olan görünür */
+.ts-slayt { position: absolute; inset: 0; background: var(--zemin); opacity: 0; visibility: hidden; transition: opacity .9s, visibility .9s; }
+.ts-slayt.aktif { opacity: 1; visibility: visible; }
+
+/* arka plandaki tam ekran fotoğraf */
+.ts-resim { position: absolute; inset: 0; --renk: var(--zemin); }
+.ts-resim img { object-position: var(--konum, center); transform: scale(1.08); transition: transform 7s ease; }
+.ts-slayt.aktif .ts-resim img { transform: scale(1); }
+
+/* yazının okunması için soldan açık renkli geçiş */
+.ts-slayt::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255, 253, 251, .9) 0%, rgba(255, 253, 251, .5) 38%, rgba(255, 253, 251, 0) 62%); }
+
+/* yazı alanı */
+.ts-yazi { position: absolute; z-index: 2; top: 50%; left: max(96px, calc((100vw - 1280px) / 2 + 24px)); transform: translateY(-50%); max-width: 540px; }
+.ts-yazi small { font-weight: 800; color: var(--mercan); font-size: 1.05rem; }
+.ts-yazi h1, .ts-yazi h2 { font-family: var(--baslik-font); font-weight: 700; font-size: clamp(2.6rem, 6vw, 5.6rem); line-height: .95; margin: 8px 0 16px; }
+.ts-yazi h1 span, .ts-yazi h2 span { color: var(--mercan); }
+.ts-yazi p { font-size: 1.2rem; color: var(--kahve-acik); margin-bottom: 26px; }
+
+/* yazılar sırayla içeri girer */
+.ts-yazi > * { opacity: 0; transform: translateY(30px); transition: opacity .7s, transform .8s; }
+.ts-slayt.aktif .ts-yazi > * { opacity: 1; transform: none; }
+.ts-slayt.aktif .ts-yazi > *:nth-child(2) { transition-delay: .15s; }
+.ts-slayt.aktif .ts-yazi > *:nth-child(3) { transition-delay: .3s; }
+.ts-slayt.aktif .ts-yazi > *:nth-child(4) { transition-delay: .45s; }
+
+/* sağ ve sol oklar */
+.ts-ok { position: absolute; z-index: 3; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%; background: #fff; color: var(--kahve); font-size: 1.6rem; box-shadow: 0 8px 24px -10px rgba(74, 46, 32, .5); transition: transform .2s; }
+.ts-ok:hover { transform: translateY(-50%) scale(1.08); }
+.ts-geri { left: 20px; }
+.ts-ileri { right: 20px; }
+
+/* alttaki ilerleme çizgileri */
+.ts-noktalar { position: absolute; z-index: 3; left: 0; right: 0; bottom: 26px; display: flex; justify-content: center; gap: 10px; }
+.ts-noktalar button { position: relative; width: 46px; height: 6px; border-radius: 99px; background: rgba(74, 46, 32, .2); overflow: hidden; }
+.ts-noktalar i { position: absolute; inset: 0; background: var(--kahve); transform: scaleX(0); transform-origin: left; }
+.ts-noktalar .aktif i { animation: ts-dol 6s linear forwards; }   /* 6s = JS'deki SURE ile aynı olmalı */
+@keyframes ts-dol { to { transform: scaleX(1); } }
+
+/* tablet: kategori satırı gizlenince üst menü kısalır */
+@media (max-width: 1000px) {
+  :root { --ts-ust: 124px; }
+}
+
+/* telefon: yazı alta, geçiş aşağıdan yukarı */
+@media (max-width: 700px) {
+  :root { --ts-ust: 108px; }
+  /* fotoğraf üstte, yazı altta: yazı fotoğrafın üstüne binmez */
+  .ts-resim { bottom: 40%; border-radius: 0 0 32px 32px; }
+  .ts-slayt::after { display: none; }
+  .ts-resim img { object-position: var(--konum-mobil, center); }
+  .ts-yazi { top: auto; bottom: 48px; left: 16px; right: 16px; transform: none; max-width: none; text-align: center; }
+  .ts-yazi h1, .ts-yazi h2 { font-size: 2.2rem; margin: 2px 0 8px; }
+  .ts-yazi p { font-size: 1rem; margin-bottom: 18px; }
+  .ts-ok { display: none; }
+  .ts-noktalar { bottom: 20px; }
+  .ts-noktalar button { width: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ts-slayt, .ts-yazi > *, .ts-resim img { transition: none; }
+}
+
+
+/* =====================================================
+   TABLET VE TELEFON
+   ===================================================== */
+@media (max-width: 1000px) {
+  .kategoriler, .arama-masaustu, .ikon small { display: none; }
+  .menu-ac { display: flex; }
+  .kart { flex-basis: calc((100% - 36px) / 3); }
+  .one-cikanlar { grid-template-columns: repeat(3, 1fr); }
+  .markalar { grid-template-columns: repeat(2, 1fr); }
+  .markalar .ana { grid-column: 1 / -1; }
+  .guvenceler .kapsayici { grid-template-columns: repeat(2, 1fr); }
+  .alt-grid { grid-template-columns: 1fr 1fr; }
+  .oklar { display: none; }
+}
+@media (max-width: 700px) {
+  .kapsayici { padding: 0 16px; }
+  .ust-satir { height: 68px; gap: 10px; }
+  .logo img { height: 44px; }
+  .kampanya { padding: 30px 0; }
+  .kampanya-ust, .kampanya.ters .kampanya-ust { grid-template-columns: 1fr; gap: 20px; }
+  .kampanya .buyuk-gorsel { order: -1; }
+  .kayan div { font-size: 1.6rem; }
+  .kart { flex-basis: 62%; }
+  .kart .sepete { opacity: 1; transform: none; left: auto; width: 40px; height: 40px; padding: 0; border-radius: 50%; font-size: 0; }
+  .kart .sepete::after { content: "+"; font-size: 1.4rem; }
+  .one-cikanlar { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .one-cikanlar a { font-size: .85rem; }
+  .rehber { grid-template-columns: 1fr; }
+  .rehber .gorsel { min-height: 240px; }
+  .rehber div.yazi { padding: 30px; }
+  .insta-kutular { grid-template-columns: repeat(3, 1fr); }
+  .guvenceler .kapsayici { grid-template-columns: 1fr; }
+  .alt-grid { grid-template-columns: 1fr; }
+  .pencere-kutu { grid-template-columns: 1fr; }
+  .pencere-kutu .gorsel { min-height: 160px; }
+}
+</style>
+</head>
+<body>
+
+
+<!-- =====================================================
+     ÜST KAMPANYA ŞERİDİ (mesajlar sırayla değişir)
+     ===================================================== -->
+<div class="serit">
+  <p>❄ Kışa özel tüm ürünlerde <b>&nbsp;%15 indirim&nbsp;</b> — Kod: KIS15</p>
+  <p class="gizli">🚚 750 ₺ ve üzeri siparişlerde kargo bedava</p>
+  <p class="gizli">↺ 14 gün içinde ücretsiz iade</p>
+</div>
+
+
+<!-- =====================================================
+     ÜST MENÜ
+     ===================================================== -->
+<header class="ust">
+  <div class="kapsayici ust-satir">
+    <button class="ikon menu-ac" id="menuAc" aria-label="Menü">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="logo" href="#"><img src="images/logo.png" alt="Kidsnays"></a>
+
+    <label class="arama arama-masaustu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="arama" type="search" placeholder="Ürün, kategori ya da renk ara…">
+    </label>
+
+    <div class="ikonlar">
+      <a class="ikon" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><small>Hesabım</small></a>
+      <a class="ikon" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg><small>Favoriler</small><span class="sayac" id="favSayac">0</span></a>
+      <a class="ikon" href="odeme.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><small>Sepetim</small><span class="sayac" id="sepetSayac">0</span></a>
+    </div>
+  </div>
+
+  <!-- KATEGORİLER (üzerine gelince büyük menü açılır) -->
+  <nav class="kapsayici">
+    <ul class="kategoriler">
+      <li>
+        <a href="#">Yenidoğan 0-18 ay</a>
+        <div class="mega"><div class="kapsayici">
+          <div><h4>Trendler</h4><ul><li><a href="#">Yeni gelenler</a></li><li><a href="#">Hastane çıkışı</a></li><li><a href="#">Hediye setleri 🎁</a></li></ul></div>
+          <div><h4>Ürünler</h4><ul><li><a href="#">Zıbın &amp; body</a></li><li><a href="#">Tulum</a></li><li><a href="#">Battaniye</a></li><li><a href="#">Patik &amp; şapka</a></li></ul></div>
+          <div><h4>Keşfet</h4><ul><li><a href="#">Kız bebek</a></li><li><a href="#">Erkek bebek</a></li><li><a href="#">Organik pamuk</a></li></ul></div>
+          <div class="gorsel" data-ad="menu-1"><img src="images/menu-1.jpg" alt="" onerror="this.remove()"></div>
+        </div></div>
+      </li>
+      <li>
+        <a href="#">Kız bebek 0-4 yaş</a>
+        <div class="mega"><div class="kapsayici">
+          <div><h4>Trendler</h4><ul><li><a href="#">Yeni sezon</a></li><li><a href="#">Kışa özel %15</a></li></ul></div>
+          <div><h4>Ürünler</h4><ul><li><a href="#">Elbise &amp; etek</a></li><li><a href="#">Salopet</a></li><li><a href="#">Hırka &amp; kazak</a></li><li><a href="#">Mont</a></li><li><a href="#">Pijama</a></li></ul></div>
+          <div><h4>Aksesuar</h4><ul><li><a href="#">Bere &amp; eldiven</a></li><li><a href="#">Çorap &amp; külotlu</a></li><li><a href="#">Toka</a></li></ul></div>
+          <div class="gorsel" data-ad="menu-2"><img src="images/menu-2.jpg" alt="" onerror="this.remove()"></div>
+        </div></div>
+      </li>
+      <li>
+        <a href="#">Erkek bebek 0-4 yaş</a>
+        <div class="mega"><div class="kapsayici">
+          <div><h4>Trendler</h4><ul><li><a href="#">Yeni sezon</a></li><li><a href="#">Kışa özel %15</a></li></ul></div>
+          <div><h4>Ürünler</h4><ul><li><a href="#">Takım</a></li><li><a href="#">Salopet</a></li><li><a href="#">Kazak &amp; sweatshirt</a></li><li><a href="#">Mont</a></li><li><a href="#">Pijama</a></li></ul></div>
+          <div><h4>Aksesuar</h4><ul><li><a href="#">Bere &amp; eldiven</a></li><li><a href="#">Çorap</a></li></ul></div>
+          <div class="gorsel" data-ad="menu-3"><img src="images/menu-3.jpg" alt="" onerror="this.remove()"></div>
+        </div></div>
+      </li>
+      <li>
+        <a href="#">Kız çocuk 2-14 yaş</a>
+        <div class="mega"><div class="kapsayici">
+          <div><h4>Trendler</h4><ul><li><a href="#">Yeni sezon</a></li><li><a href="#">Okul kombinleri</a></li></ul></div>
+          <div><h4>Ürünler</h4><ul><li><a href="#">Elbise</a></li><li><a href="#">Kazak &amp; hırka</a></li><li><a href="#">Pantolon &amp; tayt</a></li><li><a href="#">Mont &amp; kaban</a></li><li><a href="#">Pijama</a></li></ul></div>
+          <div><h4>Aksesuar</h4><ul><li><a href="#">Bere &amp; atkı</a></li><li><a href="#">Çanta</a></li></ul></div>
+          <div class="gorsel" data-ad="menu-4"><img src="images/menu-4.jpg" alt="" onerror="this.remove()"></div>
+        </div></div>
+      </li>
+      <li>
+        <a href="#">Erkek çocuk 2-14 yaş</a>
+        <div class="mega"><div class="kapsayici">
+          <div><h4>Trendler</h4><ul><li><a href="#">Yeni sezon</a></li><li><a href="#">Okul kombinleri</a></li></ul></div>
+          <div><h4>Ürünler</h4><ul><li><a href="#">Sweatshirt</a></li><li><a href="#">Pantolon &amp; eşofman</a></li><li><a href="#">Mont &amp; kaban</a></li><li><a href="#">Pijama</a></li></ul></div>
+          <div><h4>Aksesuar</h4><ul><li><a href="#">Bere &amp; atkı</a></li><li><a href="#">Çanta</a></li></ul></div>
+          <div class="gorsel" data-ad="menu-5"><img src="images/menu-5.jpg" alt="" onerror="this.remove()"></div>
+        </div></div>
+      </li>
+      <li><a href="#">Ayakkabı</a></li>
+      <li><a href="#">Aksesuar</a></li>
+      <li class="indirim"><a href="#">%15 İndirim</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- telefon menüsü -->
+<div class="mobil-menu" id="mobilMenu">
+  <button class="kapat" id="menuKapat" aria-label="Kapat">×</button>
+  <label class="arama" style="margin:50px 0 10px;max-width:none">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="search" placeholder="Ara…">
+  </label>
+  <a href="#">Yenidoğan 0-18 ay</a>
+  <a href="#">Kız bebek 0-4 yaş</a>
+  <a href="#">Erkek bebek 0-4 yaş</a>
+  <a href="#">Kız çocuk 2-14 yaş</a>
+  <a href="#">Erkek çocuk 2-14 yaş</a>
+  <a href="#">Ayakkabı</a>
+  <a href="#">Aksesuar</a>
+  <a href="#" style="color:var(--mercan)">%15 İndirim</a>
+</div>
+
+
+<main>
+
+<!-- =====================================================
+     TAM EKRAN SLIDER (4 slayt)
+     Fotoğraflar: images/slider-1.jpg … slider-4.jpg (yatay, 1920×1080)
+     Telefon için (isteğe bağlı): images/slider-1-mobil.jpg … (dikey, 1080×1200)
+     --konum: fotoğrafın hangi kısmı görünsün (örn. "right center")
+     --konum-mobil: telefonda hangi kısmı görünsün
+     ===================================================== -->
+<section class="tam-slider" id="tamSlider">
+
+  <!-- SLAYT 1 -->
+  <div class="ts-slayt aktif" style="--zemin:#F9DAD4; --konum:right center">
+    <div class="gorsel ts-resim" data-ad="slider-1"><img src="images/kampanya-1.jpg" alt="" onerror="this.remove()"></div>
+    <div class="ts-yazi">
+      <small>❄ Kış koleksiyonu</small>
+      <h1>Merhaba <span>Kış!</span></h1>
+      <p>Tüm kış koleksiyonunda sepette %15 indirim. Kod: <b>KIS15</b></p>
+      <a class="buton" href="#yeniler">Alışverişe başla</a>
+    </div>
+  </div>
+
+  <!-- SLAYT 2 -->
+  <div class="ts-slayt" style="--zemin:#F8E4C2; --konum:right center">
+    <div class="gorsel ts-resim" data-ad="slider-2"><img src="images/kampanya-2.jpg" alt="" onerror="this.remove()"></div>
+    <div class="ts-yazi">
+      <small>Yeni sezon</small>
+      <h2>Yumuşacık <span>örgüler</span></h2>
+      <p>Kaşındırmayan, sıcacık kazak ve hırkalar.</p>
+      <a class="buton" href="#">Örgüleri keşfet</a>
+    </div>
+  </div>
+
+  <!-- SLAYT 3 -->
+  <div class="ts-slayt" style="--zemin:#D6E9F5; --konum:right center">
+    <div class="gorsel ts-resim" data-ad="slider-3"><img src="images/kampanya-3.jpg" alt="" onerror="this.remove()"></div>
+    <div class="ts-yazi">
+      <small>Mont &amp; kaban</small>
+      <h2>Karda oyun <span>zamanı</span></h2>
+      <p>Hafif, sıcak ve rüzgâr geçirmeyen montlar.</p>
+      <a class="buton" href="#">Montları keşfet</a>
+    </div>
+  </div>
+
+  <!-- SLAYT 4 -->
+  <div class="ts-slayt" style="--zemin:#E6DCF3; --konum:right center">
+    <div class="gorsel ts-resim" data-ad="slider-4"><img src="images/kampanya-4.jpg" alt="" onerror="this.remove()"></div>
+    <div class="ts-yazi">
+      <small>0-24 ay</small>
+      <h2>Minikler <span>için</span></h2>
+      <p>Cilde dost, yumuşacık bebek koleksiyonu.</p>
+      <a class="buton" href="#">Bebek koleksiyonu</a>
+    </div>
+  </div>
+
+  <!-- oklar ve ilerleme çizgileri (slayt sayısı kadar buton olmalı) -->
+  <button class="ts-ok ts-geri" aria-label="Önceki">‹</button>
+  <button class="ts-ok ts-ileri" aria-label="Sonraki">›</button>
+  <div class="ts-noktalar">
+    <button class="aktif" aria-label="1. slayt"><i></i></button>
+    <button aria-label="2. slayt"><i></i></button>
+    <button aria-label="3. slayt"><i></i></button>
+    <button aria-label="4. slayt"><i></i></button>
+  </div>
+</section>
+
+
+<!-- =====================================================
+     YENİ GELENLER — kayan yazı + ürün kaydırıcısı
+     ===================================================== -->
+<section class="kampanya" style="--zemin:#F9DAD4">
+  <div class="kapsayici bolum-baslik" style="margin-bottom:0"><h2 style="font-family:var(--baslik-font);font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1">Yeni sezonun favorileri</h2><a href="#" style="font-weight:800;text-decoration:underline">Tümünü gör</a></div>
+
+  <div class="kayan" aria-hidden="true"><div>Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄ Merhaba Kış ❄&nbsp;</div></div>
+
+  <div class="kapsayici kaydirici" id="yeniler">
+    <div class="urunler" id="liste1"></div>
+    <div class="oklar"><button data-liste="liste1" data-yon="-1" aria-label="Geri">‹</button><button data-liste="liste1" data-yon="1" aria-label="İleri">›</button></div>
+  </div>
+</section>
+
+
+<!-- =====================================================
+     KAMPANYA 2 — örgüler
+     ===================================================== -->
+<section class="kampanya ters" style="--zemin:#F8E4C2">
+  <div class="kapsayici kampanya-ust">
+    <div class="gorsel buyuk-gorsel" data-ad="kampanya-2" style="--renk:#FCEFD6"><img src="images/kampanya-2.jpg" alt="" onerror="this.remove()"></div>
+    <div>
+      <h2>Kazak, hırka <span>&amp; daha fazlası</span></h2>
+      <p>Soğuk sabahlar için yumuşacık örgüler.</p>
+      <a class="buton" href="#">Hemen keşfet</a>
+    </div>
+  </div>
+  <div class="kapsayici kaydirici">
+    <div class="urunler" id="liste2"></div>
+    <div class="oklar"><button data-liste="liste2" data-yon="-1" aria-label="Geri">‹</button><button data-liste="liste2" data-yon="1" aria-label="İleri">›</button></div>
+  </div>
+</section>
+
+
+<!-- =====================================================
+     ÖNE ÇIKANLAR
+     ===================================================== -->
+<section class="kapsayici bolum">
+  <div class="bolum-baslik"><h2>Öne çıkanlar</h2></div>
+  <div class="one-cikanlar">
+    <a href="#"><div class="gorsel" data-ad="kategori-1" style="--renk:#D6E9F5"><img src="images/kategori-1.jpg" alt="" onerror="this.remove()"></div>Mont &amp; kaban</a>
+    <a href="#"><div class="gorsel" data-ad="kategori-2" style="--renk:#EFE0D2"><img src="images/kategori-2.jpg" alt="" onerror="this.remove()"></div>Botlar</a>
+    <a href="#"><div class="gorsel" data-ad="kategori-3" style="--renk:#F8E4C2"><img src="images/kategori-3.jpg" alt="" onerror="this.remove()"></div>Örgüler</a>
+    <a href="#"><div class="gorsel" data-ad="kategori-4" style="--renk:#E6DCF3"><img src="images/kategori-4.jpg" alt="" onerror="this.remove()"></div>Pijamalar</a>
+    <a href="#"><div class="gorsel" data-ad="kategori-5" style="--renk:#F6D8DF"><img src="images/kategori-5.jpg" alt="" onerror="this.remove()"></div>Bebek</a>
+    <a href="#"><div class="gorsel" data-ad="kategori-6" style="--renk:#D5EBE3"><img src="images/kategori-6.jpg" alt="" onerror="this.remove()"></div>Aksesuar</a>
+  </div>
+</section>
+
+
+<!-- =====================================================
+     MARKALAR
+     ===================================================== -->
+<section class="kapsayici bolum">
+  <div class="bolum-baslik"><h2>Markalarımız</h2><a href="#">Tüm markalar</a></div>
+  <div class="markalar">
+    <div class="gorsel ana"><h3>Özenle seçtiğimiz markalar</h3><a class="buton acik" href="#">Keşfet</a></div>
+    <a href="#" class="gorsel" data-ad="marka-1"><img src="images/marka-1.jpg" alt="" onerror="this.remove()"></a>
+    <a href="#" class="gorsel" data-ad="marka-2"><img src="images/marka-2.jpg" alt="" onerror="this.remove()"></a>
+    <a href="#" class="gorsel" data-ad="marka-3"><img src="images/marka-3.jpg" alt="" onerror="this.remove()"></a>
+    <a href="#" class="gorsel" data-ad="marka-4"><img src="images/marka-4.jpg" alt="" onerror="this.remove()"></a>
+  </div>
+</section>
+
+
+<!-- =====================================================
+     EBEVEYN REHBERİ
+     ===================================================== -->
+<section class="kapsayici bolum">
+  <div class="rehber">
+    <div class="gorsel" data-ad="rehber" style="--renk:#C4E3D8"><img src="images/rehber.jpg" alt="" onerror="this.remove()"></div>
+    <div class="yazi">
+      <h2>Ebeveyn rehberi</h2>
+      <p>Beden seçimi, kumaş bakımı ve mevsime göre kombin önerileri tek yerde.</p>
+      <a class="buton" href="#">Rehberi incele</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================================================
+     INSTAGRAM
+     ===================================================== -->
+<section class="kapsayici bolum instagram">
+  <h2>Bizi <b>@kidsnays</b> hesabından takip et 🧡<br>en güzel anlarını <b>#kidsnays</b> ile paylaş</h2>
+  <div class="insta-kutular">
+    <div class="gorsel" data-ad="instagram-1" style="--renk:#F9DAD4"><img src="images/instagram-1.jpg" alt="" onerror="this.remove()"></div>
+    <div class="gorsel" data-ad="instagram-2" style="--renk:#D6E9F5"><img src="images/instagram-2.jpg" alt="" onerror="this.remove()"></div>
+    <div class="gorsel" data-ad="instagram-3" style="--renk:#F8E4C2"><img src="images/instagram-3.jpg" alt="" onerror="this.remove()"></div>
+    <div class="gorsel" data-ad="instagram-4" style="--renk:#E6DCF3"><img src="images/instagram-4.jpg" alt="" onerror="this.remove()"></div>
+    <div class="gorsel" data-ad="instagram-5" style="--renk:#D5EBE3"><img src="images/instagram-5.jpg" alt="" onerror="this.remove()"></div>
+    <div class="gorsel" data-ad="instagram-6" style="--renk:#F6D8DF"><img src="images/instagram-6.jpg" alt="" onerror="this.remove()"></div>
+  </div>
+  <a class="buton" href="https://instagram.com/kidsnays" target="_blank">Instagram’ı gör ♡</a>
+</section>
+
+</main>
+
+
+<!-- =====================================================
+     GÜVENCELER
+     ===================================================== -->
+<div class="guvenceler">
+  <div class="kapsayici">
+    <div class="guvence"><span>🚚</span><div>Hızlı teslimat<small>750 ₺ üzeri kargo bedava</small></div></div>
+    <div class="guvence"><span>↺</span><div>Kolay iade<small>14 gün içinde ücretsiz</small></div></div>
+    <div class="guvence"><span>💬</span><div>Müşteri hizmetleri<small>Hafta içi 09:00–18:00</small></div></div>
+    <div class="guvence"><span>🔒</span><div>Güvenli ödeme<small>3D Secure ile korunur</small></div></div>
+  </div>
+</div>
+
+
+<!-- =====================================================
+     ALT BİLGİ
+     ===================================================== -->
+<footer>
+  <div class="kapsayici">
+    <div class="alt-grid">
+      <div>
+        <h4>Bültenimize katıl</h4>
+        <p>Kampanyalardan ve yeni ürünlerden ilk sen haberdar ol.</p>
+        <form class="bulten" id="bulten">
+          <input type="email" placeholder="E-posta adresin" required>
+          <button>Kaydol</button>
+        </form>
+        <p>Instagram · Facebook · Pinterest</p>
+      </div>
+      <div><h4>Kidsnays</h4><ul><li><a href="#">Hakkımızda</a></li><li><a href="#">Markalarımız</a></li><li><a href="#">Mağazamız</a></li></ul></div>
+      <div><h4>Yardım</h4><ul><li><a href="#">Sipariş takibi</a></li><li><a href="#">Teslimat ve kargo</a></li><li><a href="#">İade ve değişim</a></li><li><a href="#">Beden tablosu</a></li><li><a href="#">Sıkça sorulanlar</a></li></ul></div>
+      <div><h4>İletişim</h4><ul>
+        <!-- İLETİŞİM BİLGİLERİNİ BURAYA YAZ -->
+        <li><a href="tel:+905000000000">+90 500 000 00 00</a></li>
+        <li><a href="mailto:info@kidsnays.shop">info@kidsnays.shop</a></li>
+        <li><a href="#">Mesafeli satış sözleşmesi</a></li>
+        <li><a href="#">Gizlilik ve KVKK</a></li>
+      </ul></div>
+    </div>
+    <p class="telif">© 2026 Kidsnays Children’s Concept Store</p>
+  </div>
+</footer>
+
+
+<!-- =====================================================
+     HOŞ GELDİN PENCERESİ
+     ===================================================== -->
+<div class="pencere" id="pencere">
+  <div class="pencere-kutu">
+    <button class="kapat" id="pencereKapat" aria-label="Kapat">×</button>
+    <div class="gorsel" data-ad="hosgeldin"><img src="images/hosgeldin.jpg" alt="" onerror="this.remove()"></div>
+    <div class="pencere-yazi">
+      <small>Hoş geldin!</small>
+      <h2>Kışa özel <span>%15</span> indirim</h2>
+      <p>Tüm kış koleksiyonunda geçerli. Kodu sepette kullan.</p>
+      <div class="kod">KIS15</div><br>
+      <a class="buton" href="#yeniler" id="pencereButon">Alışverişe başla</a>
+    </div>
+  </div>
+</div>
+
+<div class="bildirim" id="bildirim"></div>
+
+
+<!-- =====================================================
+     KODLAR
+     ===================================================== -->
+<script>
+// ---- ÜRÜNLER ----
+// Sıra ödeme sayfasıyla (odeme.html) aynı olmalı.
+// resim: images klasöründeki dosya adı, fiyat: indirimsiz fiyat
+const urunler = [
+  { ad: "Kalpli Örgü Kazak",     fiyat: 649.90,  resim: "urun-1", renkler: ["#E3A92F", "#EE7C6F", "#4E8B7A"] },
+  { ad: "Kapüşonlu Şişme Mont",  fiyat: 1299.90, resim: "urun-2", renkler: ["#5AAEDD", "#8360B8"] },
+  { ad: "Ponponlu Örgü Bere",    fiyat: 249.90,  resim: "urun-3", renkler: ["#EE7C6F", "#F4E3CF"] },
+  { ad: "Kürklü Kar Botu",       fiyat: 899.90,  resim: "urun-4", renkler: ["#9B6A4B", "#4A2E20"] },
+  { ad: "Kadife Kız Elbise",     fiyat: 749.90,  resim: "urun-5", renkler: ["#8360B8", "#D9738A"] },
+  { ad: "Çizgili Yün Atkı",      fiyat: 199.90,  resim: "urun-6", renkler: ["#4E8B7A", "#EE7C6F"] },
+  { ad: "Polar Eldiven Seti",    fiyat: 179.90,  resim: "urun-7", renkler: ["#D9738A", "#5AAEDD"] },
+  { ad: "Kışlık Kadife Salopet", fiyat: 699.90,  resim: "urun-8", renkler: ["#4E8B7A", "#E3A92F"] }
+];
+const INDIRIM = 0.15;
+
+// ürün kartını oluşturur
+function kartYap(u, no) {
+  const tl = n => n.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₺";
+  return `
+    <article class="kart" data-ad="${u.ad.toLowerCase()}">
+      <div class="gorsel" data-ad="${u.resim}">
+        <img src="images/${u.resim}.jpg" alt="${u.ad}" onerror="this.remove()">
+        <span class="etiket">-%15</span>
+        <button class="favori" aria-label="Favorilere ekle"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" stroke-linejoin="round"/></svg></button>
+        <button class="sepete" data-no="${no}">Sepete ekle</button>
+      </div>
+      <h3>${u.ad}</h3>
+      <div class="fiyat"><strong>${tl(u.fiyat * (1 - INDIRIM))}</strong><s>${tl(u.fiyat)}</s></div>
+      <div class="renkler">${u.renkler.map(r => `<i style="background:${r}"></i>`).join("")}</div>
+    </article>`;
+}
+
+document.getElementById("liste1").innerHTML = urunler.map(kartYap).join("");
+// 2. listede sadece örgüler ve aksesuarlar (sıra numaraları)
+document.getElementById("liste2").innerHTML = [0, 2, 5, 6, 4, 7].map(i => kartYap(urunler[i], i)).join("");
+
+
+// ---- SEPET (ödeme sayfasıyla ortak) ----
+let sepet = JSON.parse(localStorage.getItem("kn_cart") || "[]");
+function sepetSayaci() {
+  document.getElementById("sepetSayac").textContent = sepet.reduce((t, s) => t + s.qty, 0);
+}
+sepetSayaci();
+
+let favoriSayisi = 0;
+document.addEventListener("click", e => {
+  const sepeteButon = e.target.closest(".sepete");
+  if (sepeteButon) {
+    const no = Number(sepeteButon.dataset.no);
+    const varMi = sepet.find(s => s.id === no);
+    if (varMi) varMi.qty++; else sepet.push({ id: no, qty: 1 });
+    localStorage.setItem("kn_cart", JSON.stringify(sepet));
+    sepetSayaci();
+    bildir(urunler[no].ad + " sepete eklendi");
+  }
+
+  const favoriButon = e.target.closest(".favori");
+  if (favoriButon) {
+    favoriButon.classList.toggle("secili");
+    favoriSayisi += favoriButon.classList.contains("secili") ? 1 : -1;
+    document.getElementById("favSayac").textContent = favoriSayisi;
+  }
+
+  const ok = e.target.closest("[data-liste]");
+  if (ok) {
+    const liste = document.getElementById(ok.dataset.liste);
+    liste.scrollBy({ left: liste.clientWidth * Number(ok.dataset.yon), behavior: "smooth" });
+  }
+});
+
+function bildir(yazi) {
+  const b = document.getElementById("bildirim");
+  b.textContent = yazi;
+  b.classList.add("goster");
+  setTimeout(() => b.classList.remove("goster"), 2200);
+}
+
+
+// ---- ARAMA (ilk listedeki ürünleri süzer) ----
+document.getElementById("arama").addEventListener("input", e => {
+  const aranan = e.target.value.toLowerCase();
+  document.querySelectorAll("#liste1 .kart").forEach(k => {
+    k.style.display = k.dataset.ad.includes(aranan) ? "" : "none";
+  });
+  if (aranan) document.getElementById("yeniler").scrollIntoView({ block: "center" });
+});
+
+
+// ---- ÜST ŞERİT: mesajlar 4 saniyede bir değişir ----
+const mesajlar = document.querySelectorAll(".serit p");
+let mesajNo = 0;
+setInterval(() => {
+  mesajlar[mesajNo].classList.add("gizli");
+  mesajNo = (mesajNo + 1) % mesajlar.length;
+  mesajlar[mesajNo].classList.remove("gizli");
+}, 4000);
+
+
+// ---- TELEFON MENÜSÜ ----
+document.getElementById("menuAc").onclick = () => document.getElementById("mobilMenu").classList.add("acik");
+document.getElementById("menuKapat").onclick = () => document.getElementById("mobilMenu").classList.remove("acik");
+
+
+// ---- HOŞ GELDİN PENCERESİ (oturum başına bir kez, 3 sn sonra) ----
+const pencere = document.getElementById("pencere");
+if (!sessionStorage.getItem("hosgeldin")) {
+  setTimeout(() => pencere.classList.add("acik"), 3000);
+  sessionStorage.setItem("hosgeldin", "1");
+}
+document.getElementById("pencereKapat").onclick = () => pencere.classList.remove("acik");
+document.getElementById("pencereButon").onclick = () => pencere.classList.remove("acik");
+pencere.onclick = e => { if (e.target === pencere) pencere.classList.remove("acik"); };
+
+
+// ---- BÜLTEN ----
+document.getElementById("bulten").onsubmit = e => {
+  e.preventDefault();
+  e.target.reset();
+  bildir("Bültene kaydoldun, teşekkürler!");
+};
+
+// ---- TAM EKRAN SLIDER ----
+{
+  const slider = document.getElementById("tamSlider");
+  const slaytlar = slider.querySelectorAll(".ts-slayt");
+  const noktalar = slider.querySelectorAll(".ts-noktalar button");
+  const SURE = 6000;          // 6 saniye (CSS'teki 6s ile aynı olmalı)
+  let sira = 0;
+  let zamanlayici;
+
+  function slaytGoster(yeni) {
+    slaytlar[sira].classList.remove("aktif");
+    noktalar[sira].classList.remove("aktif");
+    sira = (yeni + slaytlar.length) % slaytlar.length;   // sondan başa döner
+    slaytlar[sira].classList.add("aktif");
+    void noktalar[sira].offsetWidth;                      // çizgi animasyonunu baştan başlatır
+    noktalar[sira].classList.add("aktif");
+    clearInterval(zamanlayici);
+    zamanlayici = setInterval(() => slaytGoster(sira + 1), SURE);
+  }
+
+  slider.querySelector(".ts-ileri").onclick = () => slaytGoster(sira + 1);
+  slider.querySelector(".ts-geri").onclick = () => slaytGoster(sira - 1);
+  noktalar.forEach((nokta, i) => nokta.onclick = () => slaytGoster(i));
+
+  // telefonda parmakla kaydırma
+  let dokunmaX = 0;
+  slider.addEventListener("touchstart", e => dokunmaX = e.touches[0].clientX, { passive: true });
+  slider.addEventListener("touchend", e => {
+    const fark = e.changedTouches[0].clientX - dokunmaX;
+    if (fark < -50) slaytGoster(sira + 1);
+    if (fark > 50) slaytGoster(sira - 1);
+  });
+
+  // telefonda dikey fotoğraf kullan: slider-1-mobil.jpg varsa onu gösterir, yoksa normalini
+  if (window.matchMedia("(max-width: 700px)").matches) {
+    slider.querySelectorAll(".ts-resim img").forEach(img => {
+      const normal = img.getAttribute("src");
+      img.onerror = () => { img.onerror = () => img.remove(); img.src = normal; };
+      img.src = normal.replace(".jpg", "-mobil.jpg");
+    });
+  }
+
+  zamanlayici = setInterval(() => slaytGoster(sira + 1), SURE);
+}
+</script>
+
+</body>
+</html>
